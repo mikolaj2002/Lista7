@@ -1,43 +1,69 @@
+#include <memory>
+
 #ifndef NODE_HPP
 #define NODE_HPP
 
-template <typename T> class Node
+/**
+ * Klasa reprezentuje element drzewa binarnego.
+ * @tparam T Typ drzewa binarnego.
+ */
+template <typename T>
+class Node
 {
 private:
     T value;
-    Node<T> *left;
-    Node<T> *right;
+    std::shared_ptr<Node<T>> left;
+    std::shared_ptr<Node<T>> right;
 
 public:
-    Node()
-    { left = right = nullptr; }
+    /**
+     * Domyślny konstruktor klasy Node.
+     */
+    Node();
 
-    Node(T v) : value(v)
-    { left = right = nullptr; }
+    /**
+     * Konstruktor klasy Node.
+     * @param v Wartość elementu drzewa.
+     */
+    Node(T v);
 
-    Node(T v, Node<T> *l, Node<T> *r) : value(v), left(l), right(r) {}
+    /**
+     * Zwraca wartość elementu drzewa.
+     * @return T Wartość elementu drzewa.
+     */
+    T getVal() const;
 
-    ~Node()
-    {
-        delete left;
-        delete right;
-    }
+    /**
+     * Zwraca referencję na element drzewa po lewej.
+     * @return std::shared_ptr<Node<T>>& Referencja na element drzewa po lewej.
+     */
+    std::shared_ptr<Node<T>>& getLeft();
 
-    T getVal() { return value; }
+    /**
+     * Zwraca referencję na element drzewa po prawej.
+     * @return std::shared_ptr<Node<T>>& Referencja na element drzewa po prawej.
+     */
+    std::shared_ptr<Node<T>>& getRight();
 
-    Node<T>* getLeft() { return left; }
+    /**
+     * Funkcja ustawia wartość elementu drzewa.
+     * @param v Nowa wartość.
+     */
+    void setVal(T v);
 
-    Node<T>* getRight() { return right; }
+    /**
+     * Funkcja ustawia element drzewa po lewej.
+     * @param l Nowy element drzewa po lewej.
+     */
+    void setLeft(std::shared_ptr<Node<T>> l);
 
-    Node<T>** getLeftPointer() { return &left; }
-
-    Node<T>** getRightPointer() { return &right; }
-
-    void setVal(T v) { value = v; }
-
-    void setLeft(Node<T> *l) { left = l; }
-
-    void setRight(Node<T> *r) { right = r; }
+    /**
+     * Funkcja ustawia element drzewa po prawej.
+     * @param l Nowy element drzewa po prawej.
+     */
+    void setRight(std::shared_ptr<Node<T>> r);
 };
+
+#include <Node.cpp>
 
 #endif

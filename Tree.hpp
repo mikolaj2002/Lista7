@@ -4,139 +4,60 @@
 #ifndef TREE_HPP
 #define TREE_HPP
 
-static bool operator<(std::string s1, std::string s2)
-{
-    if (s1 == "" && s2 == "")
-        return false;
-    else if (s1 == "" && s2 != "")
-        return true;
-    else if (s1 != "" && s2 == "")
-        return false;
-
-    if (s1[0] < s2[0])
-        return true;
-    else if (s2[0] < s1[0])
-        return false;
-    
-    s1 = (std::string)((char*)(s1.c_str()) + 1);
-    s2 = (std::string)((char*)(s2.c_str()) + 1);
-    
-    return s1 < s2;
-}
-
-template <typename T> class Tree
+/**
+ * Klasa reprezentuje drzewo binarne zadanego typu.
+ * @tparam T Typ drzewa.
+ */
+template <typename T>
+class Tree
 {
 private:
-    Node<T> *root;
+    std::shared_ptr<Node<T>> NULLPTR = std::shared_ptr<Node<T>>(nullptr);
+    std::shared_ptr<Node<T>> root;
 
-    void recInsert(Node<T> **node, T elem)
-    {
-        if (*node == nullptr)
-            *node = new Node<T>(elem);
-
-        else if (elem < (*node)->getVal())
-            recInsert((*node)->getLeftPointer(), elem);
-        
-        else if ((*node)->getVal() < elem)
-            recInsert((*node)->getRightPointer(), elem);
-    }
-    
-    bool recSearch(Node<T> *node, T elem)
-    {
-        if (node == nullptr)
-            return false;
-
-        else if (node->getVal() == elem)
-            return true;
-
-        else if (elem < node->getVal())
-            return recSearch(node->getLeft(), elem);
-        
-        return recSearch(node->getRight(), elem);
-    }
-
-    void recDraw(Node<T> *node)
-    {
-        if (node != nullptr)
-        {
-            recDraw(node->getLeft());
-            std::cout << node->getVal() << " ";
-            recDraw(node->getRight());
-        }
-    }
-
-    Node<T>* minValueNode(Node<T> *node)
-    {
-        Node<T> *current = node;
-        while (current != nullptr && current->getLeft() != nullptr)
-            current = current->getLeft();
-        return current;
-    }
-
-    Node<T>* recRemove(Node<T> *node, T elem)
-    {
-        if (node == nullptr)
-            return nullptr;
-
-        if (elem < node->getVal())
-            node->setLeft(recRemove(node->getLeft(), elem));
-        
-        else if (node->getVal() < elem)
-            node->setRight(recRemove(node->getRight(), elem));
-
-        else
-        {
-            if (node->getLeft() == nullptr && node->getRight() == nullptr)
-                return nullptr;
-            
-            else if (node->getRight() == nullptr)
-            {
-                Node<T> *temp = node->getRight();
-                delete node;
-                return temp;
-            }
-
-            else if (node->getRight() == nullptr)
-            {
-                Node<T> *temp = node->getLeft();
-                delete node;
-                return temp;
-            }
-
-            Node<T> *temp = minValueNode(node->getRight());
-            node->setVal(temp->getVal());
-            node->setRight(recRemove(node->getRight(), temp->getVal()));
-        }
-
-        return node;
-    }
+    void recInsert(std::shared_ptr<Node<T>> &node, T elem);
+    bool recSearch(const std::shared_ptr<Node<T>> &node, T elem) const;
+    std::string recDraw(const std::shared_ptr<Node<T>> &node) const;
+    std::shared_ptr<Node<T>>& minValueNode(std::shared_ptr<Node<T>> &node) const;
+    std::shared_ptr<Node<T>>& recRemove(std::shared_ptr<Node<T>> &node, T elem);
 
 public:
-    Tree()
-    {
-        root = nullptr;
-    }
+    /**
+     * Konstruktor klasy Tree.
+     */
+    Tree();
 
-    void insert(T elem)
-    {
-        recInsert(&root, elem);
-    }
+    /**
+     * Funkcja wsadza element do drzewa.
+     * Wartości w drzewie się nie powtarzają.
+     * @param elem Wsadzany element.
+     */
+    void insert(T elem);
 
-    bool search(T elem)
-    {
-        return recSearch(root, elem);
-    }
+    /**
+     * Funkcja szuka zadanego elementu w drzewie.
+     * @param elem Zadany element.
+     * @return true Element został znaleziony.
+     * @return false Element nie został znaleziony.
+     */
+    bool search(T elem) const;
 
-    void draw()
-    {
-        recDraw(root);
-        std::cout << std::endl;
-    }
+    /**
+     * Funkcja usuwa zadany element z drzewa, o ile w nim jest.
+     * @param elem Wartość elementu do usunięcia.
+     */
+    void remove(T elem);
 
-    void remove(T elem)
+    /**
+     * Funkcja rysuje drzewo na standardowe wyjście.
+     */
+    friend std::ostream& operator<<(std::ostream& out, Tree<T> tree)
     {
-        recRemove(root, elem);
+        out << tree.recDraw(tree.root);
+        return out;
     }
 };
+
+#include <Tree.cpp>
 
 #endif

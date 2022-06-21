@@ -3,23 +3,28 @@
 
 int main()
 {
-    Tree<int> test;
+    Tree<int> tree;
 
-    test.insert(10);
-    test.insert(5);
-    test.insert(8);
-    test.insert(3);
-    test.insert(14);
-    test.insert(22);
-    test.insert(11);
+    tree.remove(5);
+    std::cout << tree << std::endl;
 
-    test.draw();
+    tree.insert(10);
+    tree.insert(8);
+    tree.insert(9);
+    tree.insert(20);
+    tree.insert(15);
+    tree.insert(25);
+    tree.insert(12);
+    std::cout << tree << std::endl;
 
-    test.remove(5);
+    tree.remove(20);
+    std::cout << tree << std::endl;
 
-    test.search(5);
+    tree.remove(10);
+    std::cout << tree << std::endl;
 
-    test.draw();
+    tree.insert(10);
+    std::cout << tree << std::endl;
 
     return 0;
 }
