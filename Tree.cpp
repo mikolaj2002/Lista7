@@ -107,9 +107,4 @@ template <typename T>
 void Tree<T>::remove(T elem)
 {
     root = recRemove(root, elem);
-    if (elem == 10)
-    {
-        insert(25);
-        insert(15);
-    }
 }
